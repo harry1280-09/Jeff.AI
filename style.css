@@ -36,13 +36,16 @@ nav {
     left: 0;
     z-index: 1000;
 }
-nav a {
+nav a, nav button {
     color: white;
     text-decoration: none;
     padding: 0.5rem 1rem;
     font-size: 1.2rem;
+    background: none;
+    border: none;
+    cursor: pointer;
 }
-nav a:hover {
+nav a:hover, nav button:hover {
     background-color: #4169E1;
     border-radius: 5px;
 }
