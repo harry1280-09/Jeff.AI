@@ -3,13 +3,13 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Games - Ferris AI</title>
+    <title>AI Chat - Ferris AI</title>
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
     <header>
         <img src="logo.svg" alt="Ferris AI Logo" style="height: 80px;">
-        <h1>Games</h1>
+        <h1>AI Chat</h1>
     </header>
     <nav>
         <a href="index.html">Home</a>
@@ -17,10 +17,11 @@
         <a href="games.html">Games</a>
         <a href="chat.html" id="chatLink">AI Chat</a>
         <a href="settings.html" id="settingsLink">Settings</a>
+        <a href="code.html">Code Playground</a>
         <button id="logoutBtn">Logout</button>
     </nav>
-    <main id="games">
-        <h2>Games</h2>
+    <main id="chat">
+        <h2>AI Chat</h2>
         <p>Coming Soon</p>
     </main>
     <footer>
@@ -33,6 +34,13 @@
             document.getElementById('settingsLink').style.display = 'none';
             document.getElementById('logoutBtn').style.display = 'none';
         }
+
+        document.getElementById('logoutBtn').addEventListener('click', () => {
+            localStorage.removeItem('isAuthenticated');
+            localStorage.removeItem('isAdmin');
+            alert('You have been logged out.');
+            window.location.href = 'login.html'; // Redirect to login page
+        });
     </script>
 </body>
 </html>
