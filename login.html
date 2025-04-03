@@ -29,17 +29,19 @@
         <p>&copy; 2025 Ferris AI</p>
     </footer>
     <script>
+        // Predefine the admin account
+        localStorage.setItem('danno.b@outlook.com', 'HappyChappy33!');
+
         document.getElementById('loginForm').addEventListener('submit', (e) => {
             e.preventDefault();
             const email = document.getElementById('email').value;
             const password = document.getElementById('password').value;
 
-            // Check credentials (this is a simple example, use a secure method in production)
             const storedPassword = localStorage.getItem(email);
             if (storedPassword === password) {
                 alert('Login successful!');
                 localStorage.setItem('isAuthenticated', 'true');
-                if (email === 'admin@example.com') {
+                if (email === 'danno.b@outlook.com') {
                     localStorage.setItem('isAdmin', 'true');
                 }
                 window.location.href = 'index.html'; // Redirect to home page
