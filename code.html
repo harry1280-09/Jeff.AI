@@ -27,18 +27,30 @@
             <select id="language">
                 <option value="python">Python</option>
                 <option value="javascript">JavaScript</option>
+                <option value="html">HTML</option>
                 <option value="cpp">C++</option>
                 <option value="java">Java</option>
                 <!-- Add more languages as needed -->
             </select>
         </div>
         <div>
-            <label for="codeEditor">Write your code:</label>
-            <textarea id="codeEditor" rows="10" cols="80"></textarea>
+            <label for="fileName">File Name:</label>
+            <input type="text" id="fileName" placeholder="Enter file name (e.g., main.py)">
+            <button id="addFileBtn">Add File</button>
+        </div>
+        <div id="fileTabs">
+            <!-- Tabs for multiple files will be dynamically added here -->
+        </div>
+        <div id="fileEditors">
+            <!-- Code editors for multiple files will be dynamically added here -->
         </div>
         <button id="runCodeBtn">Run Code</button>
         <h3>Output:</h3>
-        <pre id="output"></pre>
+        <div id="outputContainer">
+            <pre id="outputText" class="outputBox"></pre>
+            <div id="outputImage" class="outputBox"></div>
+            <iframe id="outputIframe" class="outputBox"></iframe>
+        </div>
     </main>
     <footer>
         <p>&copy; 2025 Ferris AI</p>
@@ -58,9 +70,54 @@
             window.location.href = 'login.html'; // Redirect to login page
         });
 
+        const fileTabs = document.getElementById('fileTabs');
+        const fileEditors = document.getElementById('fileEditors');
+        const files = {};
+
+        document.getElementById('addFileBtn').addEventListener('click', () => {
+            const fileName = document.getElementById('fileName').value;
+            if (fileName && !files[fileName]) {
+                addFileTab(fileName);
+                files[fileName] = '';
+            }
+        });
+
+        function addFileTab(fileName) {
+            const tab = document.createElement('button');
+            tab.textContent = fileName;
+            tab.classList.add('fileTab');
+            tab.addEventListener('click', () => openFile(fileName));
+            fileTabs.appendChild(tab);
+
+            const editor = document.createElement('textarea');
+            editor.id = `editor-${fileName}`;
+            editor.classList.add('codeEditor');
+            editor.addEventListener('input', (e) => {
+                files[fileName] = e.target.value;
+            });
+            fileEditors.appendChild(editor);
+            openFile(fileName);
+        }
+
+        function openFile(fileName) {
+            const editors = document.querySelectorAll('.codeEditor');
+            editors.forEach(editor => editor.style.display = 'none');
+            document.getElementById(`editor-${fileName}`).style.display = 'block';
+        }
+
         document.getElementById('runCodeBtn').addEventListener('click', async () => {
             const language = document.getElementById('language').value;
-            const code = document.getElementById('codeEditor').value;
+            const fileEntries = Object.entries(files);
+
+            if (language === 'html') {
+                const htmlContent = fileEntries.map(([fileName, content]) => {
+                    return `<script type="text/plain" data-filename="${fileName}">${content}</script>`;
+                }).join('\n');
+                const iframe = document.getElementById('outputIframe');
+                iframe.srcdoc = htmlContent;
+                showOutput('html');
+                return;
+            }
 
             try {
                 const response = await fetch('https://judge0.p.rapidapi.com/submissions?base64_encoded=false&wait=true', {
@@ -71,5 +128,37 @@
                         'X-RapidAPI-Host': 'judge0.p.rapidapi.com'
                     },
                     body: JSON.stringify({
-                        source_code: code,
-                        language
+                        source_code: fileEntries.map(([fileName, content]) => `# ${fileName}\n${content}`).join('\n\n'),
+                        language_id: getLanguageId(language)
+                    })
+                });
+                const data = await response.json();
+                document.getElementById('outputText').textContent = data.stdout || data.stderr || 'Error running code';
+                showOutput('text');
+            } catch (error) {
+                console.error('Error:', error);
+                document.getElementById('outputText').textContent = 'Error running code';
+                showOutput('text');
+            }
+        });
+
+        function showOutput(type) {
+            document.getElementById('outputText').style.display = type === 'text' ? 'block' : 'none';
+            document.getElementById('outputImage').style.display = type === 'image' ? 'block' : 'none';
+            document.getElementById('outputIframe').style.display = type === 'html' ? 'block' : 'none';
+        }
+
+        function getLanguageId(language) {
+            switch (language) {
+                case 'python': return 71; // Python 3
+                case 'javascript': return 63; // JavaScript
+                case 'html': return null; // HTML handled separately
+                case 'cpp': return 54; // C++
+                case 'java': return 62; // Java
+                // Add more languages and their corresponding IDs
+                default: return 71; // Default to Python 3
+            }
+        }
+    </script>
+</body>
+</html>
