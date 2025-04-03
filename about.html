@@ -17,6 +17,7 @@
         <a href="games.html">Games</a>
         <a href="chat.html" id="chatLink">AI Chat</a>
         <a href="settings.html" id="settingsLink">Settings</a>
+        <a href="code.html">Code Playground</a>
         <button id="logoutBtn">Logout</button>
     </nav>
     <main id="about">
@@ -33,6 +34,13 @@
             document.getElementById('settingsLink').style.display = 'none';
             document.getElementById('logoutBtn').style.display = 'none';
         }
+
+        document.getElementById('logoutBtn').addEventListener('click', () => {
+            localStorage.removeItem('isAuthenticated');
+            localStorage.removeItem('isAdmin');
+            alert('You have been logged out.');
+            window.location.href = 'login.html'; // Redirect to login page
+        });
     </script>
 </body>
 </html>
