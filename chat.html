@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Chat - Ferris AI</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <header>
+        <img src="logo.svg" alt="Ferris AI Logo" style="height: 80px;">
+        <h1>AI Chat</h1>
+    </header>
+    <nav>
+        <a href="index.html">Home</a>
+        <a href="about.html">About</a>
+        <a href="games.html">Games</a>
+        <a href="chat.html" id="chatLink">AI Chat</a>
+        <a href="settings.html" id="settingsLink">Settings</a>
+        <button id="logoutBtn">Logout</button>
+    </nav>
+    <main id="chat">
+        <h2>AI Chat</h2>
+        <p>Coming Soon</p>
+    </main>
+    <footer>
+        <p>&copy; 2025 Ferris AI</p>
+    </footer>
+    <script>
+        const isAuthenticated = localStorage.getItem('isAuthenticated') === 'true';
+        if (!isAuthenticated) {
+            document.getElementById('chatLink').style.display = 'none';
+            document.getElementById('settingsLink').style.display = 'none';
+            document.getElementById('logoutBtn').style.display = 'none';
+        }
+    </script>
+</body>
+</html>
