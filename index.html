@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ferris AI</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <header>
+        <img src="logo.svg" alt="Ferris AI Logo" style="height: 80px;">
+        <h1>Welcome to Ferris AI</h1>
+    </header>
+    <nav>
+        <a href="#home">Home</a>
+        <a href="#chat">AI Chat</a>
+        <a href="settings.html">Settings</a>
+    </nav>
+    <main id="home">
+        <h2>Home</h2>
+        <p>This is the home page of Ferris AI.</p>
+    </main>
+    <main id="chat" style="display: none;">
+        <h2>AI Chat</h2>
+        <p>Coming Soon</p>
+    </main>
+    <footer>
+        <p>&copy; 2025 Ferris AI</p>
+    </footer>
+    <script>
+        const navLinks = document.querySelectorAll('nav a');
+        navLinks.forEach(link => {
+            link.addEventListener('click', (e) => {
+                e.preventDefault();
+                document.querySelectorAll('main').forEach(main => main.style.display = 'none');
+                document.querySelector(link.getAttribute('href')).style.display = 'block');
+            });
+        });
+    </script>
+</body>
+</html>
