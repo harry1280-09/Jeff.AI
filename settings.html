@@ -3,12 +3,12 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Settings - Jeff AI</title>
+    <title>Settings - Ferris AI</title>
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
     <header>
-        <img src="logo.svg" alt="Jeff AI Logo" style="height: 80px;">
+        <img src="logo.svg" alt="Ferris AI Logo" style="height: 80px;">
         <h1>Settings</h1>
     </header>
     <nav>
@@ -33,16 +33,19 @@
         <div class="account-management">
             <h3>Account Management</h3>
             <button id="createAccountBtn">Create Account</button>
+            <h3>Change Password</h3>
+            <button id="changePasswordBtn">Change Password</button>
         </div>
     </main>
     <footer>
-        <p>&copy; 2025 Jeff AI</p>
+        <p>&copy; 2025 Ferris AI</p>
     </footer>
     <script>
         const isAuthenticated = localStorage.getItem('isAuthenticated') === 'true';
         if (!isAuthenticated) {
             document.getElementById('chatLink').style.display = 'none';
             document.getElementById('settingsLink').style.display = 'none';
+            document.getElementById('logoutBtn').style.display = 'none';
         }
 
         // Theme selection
@@ -67,14 +70,12 @@
         // Account management
         const createAccountBtn = document.getElementById('createAccountBtn');
         createAccountBtn.addEventListener('click', () => {
-            // Only the admin account can create other accounts
             const isAdmin = localStorage.getItem('isAdmin') === 'true';
             if (isAdmin) {
                 const email = prompt('Enter new account email:');
                 const password = prompt('Enter new account password:');
                 if (email && password) {
                     alert(`Account for ${email} created successfully!`);
-                    // Store account details (this is a simple example, use a secure method in production)
                     localStorage.setItem(email, password);
                 } else {
                     alert('Account creation failed. Please provide valid email and password.');
@@ -84,11 +85,23 @@
             }
         });
 
-        document.getElementById('logoutBtn').addEventListener('click', () => {
-            localStorage.removeItem('isAuthenticated');
-            localStorage.removeItem('isAdmin');
-            alert('You have been logged out.');
-            window.location.href = 'login.html'; // Redirect to login page
+        // Password change
+        const changePasswordBtn = document.getElementById('changePasswordBtn');
+        changePasswordBtn.addEventListener('click', () => {
+            const email = prompt('Enter your email:');
+            const currentPassword = prompt('Enter your current password:');
+            const storedPassword = localStorage.getItem(email);
+            if (storedPassword === currentPassword) {
+                const newPassword = prompt('Enter your new password:');
+                if (newPassword) {
+                    localStorage.setItem(email, newPassword);
+                    alert('Password changed successfully!');
+                } else {
+                    alert('Password change failed. Please provide a valid new password.');
+                }
+            } else {
+                alert('Invalid email or current password.');
+            }
         });
     </script>
 </body>
