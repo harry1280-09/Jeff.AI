@@ -17,6 +17,7 @@
         <a href="games.html">Games</a>
         <a href="chat.html" id="chatLink">AI Chat</a>
         <a href="settings.html" id="settingsLink">Settings</a>
+        <a href="code.html">Code Playground</a>
         <button id="logoutBtn">Logout</button>
     </nav>
     <main id="settings">
@@ -48,6 +49,13 @@
             document.getElementById('logoutBtn').style.display = 'none';
         }
 
+        document.getElementById('logoutBtn').addEventListener('click', () => {
+            localStorage.removeItem('isAuthenticated');
+            localStorage.removeItem('isAdmin');
+            alert('You have been logged out.');
+            window.location.href = 'login.html'; // Redirect to login page
+        });
+
         // Theme selection
         const themeSelect = document.getElementById('theme-select');
         themeSelect.addEventListener('change', (e) => {
@@ -70,18 +78,14 @@
         // Account management
         const createAccountBtn = document.getElementById('createAccountBtn');
         createAccountBtn.addEventListener('click', () => {
-            const isAdmin = localStorage.getItem('isAdmin') === 'true';
-            if (isAdmin) {
-                const email = prompt('Enter new account email:');
-                const password = prompt('Enter new account password:');
-                if (email && password) {
-                    alert(`Account for ${email} created successfully!`);
-                    localStorage.setItem(email, password);
-                } else {
-                    alert('Account creation failed. Please provide valid email and password.');
-                }
+            const email = prompt('Enter new account email:');
+            const password = prompt('Enter new account password:');
+            if (email && password) {
+                alert(`Account for ${email} created successfully!`);
+                // Store account details (this is a simple example, use a secure method in production)
+                localStorage.setItem(email, password);
             } else {
-                alert('You do not have permission to create accounts.');
+                alert('Account creation failed. Please provide valid email and password.');
             }
         });
 
