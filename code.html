@@ -21,22 +21,10 @@
         <button id="logoutBtn">Logout</button>
     </nav>
     <main id="code">
-        <h2>Code Playground</h2>
-        <div>
-            <label for="language">Select Language:</label>
-            <select id="language">
-                <option value="python">Python</option>
-                <option value="javascript">JavaScript</option>
-                <option value="html">HTML</option>
-                <option value="cpp">C++</option>
-                <option value="java">Java</option>
-                <!-- Add more languages as needed -->
-            </select>
-        </div>
-        <div>
-            <label for="fileName">File Name:</label>
-            <input type="text" id="fileName" placeholder="Enter file name (e.g., main.py)">
-            <button id="addFileBtn">Add File</button>
+        <div class="top-bar">
+            <button id="newFileBtn">New File</button>
+            <button id="newCodeSpaceBtn">New Code Space</button>
+            <button id="saveBtn">Save</button>
         </div>
         <div id="fileTabs">
             <!-- Tabs for multiple files will be dynamically added here -->
@@ -44,12 +32,13 @@
         <div id="fileEditors">
             <!-- Code editors for multiple files will be dynamically added here -->
         </div>
-        <button id="runCodeBtn">Run Code</button>
-        <h3>Output:</h3>
-        <div id="outputContainer">
-            <pre id="outputText" class="outputBox"></pre>
-            <div id="outputImage" class="outputBox"></div>
-            <iframe id="outputIframe" class="outputBox"></iframe>
+        <div id="previewContainer">
+            <h3>Live Preview:</h3>
+            <div id="outputContainer">
+                <pre id="outputText" class="outputBox"></pre>
+                <div id="outputImage" class="outputBox"></div>
+                <iframe id="outputIframe" class="outputBox"></iframe>
+            </div>
         </div>
     </main>
     <footer>
@@ -74,15 +63,35 @@
         const fileEditors = document.getElementById('fileEditors');
         const files = {};
 
-        document.getElementById('addFileBtn').addEventListener('click', () => {
-            const fileName = document.getElementById('fileName').value;
-            if (fileName && !files[fileName]) {
-                addFileTab(fileName);
-                files[fileName] = '';
+        document.getElementById('newFileBtn').addEventListener('click', () => {
+            const fileName = prompt('Enter file name (e.g., main.py)');
+            const fileType = prompt('Enter file type (e.g., python, html, javascript, etc.)');
+            if (fileName && fileType && !files[fileName]) {
+                addFileTab(fileName, fileType);
+                files[fileName] = { type: fileType, content: '' };
             }
         });
 
-        function addFileTab(fileName) {
+        document.getElementById('newCodeSpaceBtn').addEventListener('click', () => {
+            if (confirm('Are you sure you want to create a new code space? This will clear all current files.')) {
+                while (fileTabs.firstChild) fileTabs.removeChild(fileTabs.firstChild);
+                while (fileEditors.firstChild) fileEditors.removeChild(fileEditors.firstChild);
+                Object.keys(files).forEach(key => delete files[key]);
+            }
+        });
+
+        document.getElementById('saveBtn').addEventListener('click', () => {
+            const codeSpace = JSON.stringify(files);
+            const blob = new Blob([codeSpace], { type: 'application/json' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = 'code_space.json';
+            a.click();
+            URL.revokeObjectURL(url);
+        });
+
+        function addFileTab(fileName, fileType) {
             const tab = document.createElement('button');
             tab.textContent = fileName;
             tab.classList.add('fileTab');
@@ -93,7 +102,8 @@
             editor.id = `editor-${fileName}`;
             editor.classList.add('codeEditor');
             editor.addEventListener('input', (e) => {
-                files[fileName] = e.target.value;
+                files[fileName].content = e.target.value;
+                updatePreview();
             });
             fileEditors.appendChild(editor);
             openFile(fileName);
@@ -105,13 +115,13 @@
             document.getElementById(`editor-${fileName}`).style.display = 'block';
         }
 
-        document.getElementById('runCodeBtn').addEventListener('click', async () => {
-            const language = document.getElementById('language').value;
+        function updatePreview() {
             const fileEntries = Object.entries(files);
+            const language = fileEntries[0]?.[1]?.type;
 
             if (language === 'html') {
-                const htmlContent = fileEntries.map(([fileName, content]) => {
-                    return `<script type="text/plain" data-filename="${fileName}">${content}</script>`;
+                const htmlContent = fileEntries.map(([fileName, file]) => {
+                    return `<script type="text/plain" data-filename="${fileName}">${file.content}</script>`;
                 }).join('\n');
                 const iframe = document.getElementById('outputIframe');
                 iframe.srcdoc = htmlContent;
@@ -119,45 +129,17 @@
                 return;
             }
 
-            try {
-                const response = await fetch('https://judge0.p.rapidapi.com/submissions?base64_encoded=false&wait=true', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                        'X-RapidAPI-Key': 'YOUR_RAPIDAPI_KEY',
-                        'X-RapidAPI-Host': 'judge0.p.rapidapi.com'
-                    },
-                    body: JSON.stringify({
-                        source_code: fileEntries.map(([fileName, content]) => `# ${fileName}\n${content}`).join('\n\n'),
-                        language_id: getLanguageId(language)
-                    })
-                });
-                const data = await response.json();
-                document.getElementById('outputText').textContent = data.stdout || data.stderr || 'Error running code';
-                showOutput('text');
-            } catch (error) {
-                console.error('Error:', error);
-                document.getElementById('outputText').textContent = 'Error running code';
-                showOutput('text');
-            }
-        });
+            document.getElementById('outputText').textContent = '';
+            fileEntries.forEach(([fileName, file]) => {
+                document.getElementById('outputText').textContent += `# ${fileName}\n${file.content}\n\n`;
+            });
+            showOutput('text');
+        }
 
         function showOutput(type) {
             document.getElementById('outputText').style.display = type === 'text' ? 'block' : 'none';
             document.getElementById('outputImage').style.display = type === 'image' ? 'block' : 'none';
             document.getElementById('outputIframe').style.display = type === 'html' ? 'block' : 'none';
-        }
-
-        function getLanguageId(language) {
-            switch (language) {
-                case 'python': return 71; // Python 3
-                case 'javascript': return 63; // JavaScript
-                case 'html': return null; // HTML handled separately
-                case 'cpp': return 54; // C++
-                case 'java': return 62; // Java
-                // Add more languages and their corresponding IDs
-                default: return 71; // Default to Python 3
-            }
         }
     </script>
 </body>
