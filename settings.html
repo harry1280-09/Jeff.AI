@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Settings - Ferris AI</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f0f0f0;
+        }
+        main {
+            padding: 2rem;
+            text-align: center;
+        }
+        .theme-option {
+            margin: 1rem;
+        }
+    </style>
+</head>
+<body>
+    <main>
+        <h2>Settings</h2>
+        <div class="theme-option">
+            <label for="theme-select">Choose a theme:</label>
+            <select id="theme-select">
+                <option value="default">Default</option>
+                <option value="dark">Dark</option>
+                <option value="light">Light</option>
+            </select>
+        </div>
+    </main>
+    <script>
+        const themeSelect = document.getElementById('theme-select');
+        themeSelect.addEventListener('change', (e) => {
+            const theme = e.target.value;
+            if (theme === 'dark') {
+                document.body.style.backgroundColor = '#333';
+                document.body.style.color = '#fff';
+            } else if (theme === 'light') {
+                document.body.style.backgroundColor = '#fff';
+                document.body.style.color = '#000';
+            } else {
+                document.body.style.backgroundColor = '#f0f0f0';
+                document.body.style.color = '#000';
+            }
+        });
+    </script>
+</body>
+</html>
