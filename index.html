@@ -3,13 +3,13 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Jeff AI</title>
+    <title>Ferris AI</title>
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
     <header>
-        <img src="logo.svg" alt="Jeff AI Logo" style="height: 80px;">
-        <h1>Welcome to Jeff AI</h1>
+        <img src="logo.svg" alt="Ferris AI Logo" style="height: 80px;">
+        <h1>Welcome to Ferris AI</h1>
     </header>
     <nav>
         <a href="index.html">Home</a>
@@ -21,19 +21,17 @@
     </nav>
     <main id="home">
         <h2>Home</h2>
-        <p>This is the home page of Jeff AI.</p>
+        <p>This is the home page of Ferris AI.</p>
     </main>
     <footer>
-        <p>&copy; 2025 Jeff AI</p>
+        <p>&copy; 2025 Ferris AI</p>
     </footer>
     <script>
-        // Check if user is authenticated
         const isAuthenticated = localStorage.getItem('isAuthenticated') === 'true';
-
-        // Hide chat and settings links if not authenticated
         if (!isAuthenticated) {
             document.getElementById('chatLink').style.display = 'none';
             document.getElementById('settingsLink').style.display = 'none';
+            document.getElementById('logoutBtn').style.display = 'none';
         }
 
         document.getElementById('logoutBtn').addEventListener('click', () => {
