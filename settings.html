@@ -33,7 +33,13 @@
         </div>
         <div class="account-management">
             <h3>Account Management</h3>
-            <button id="createAccountBtn">Create Account</button>
+            <form id="createAccountForm">
+                <label for="email">Email:</label>
+                <input type="email" id="email" name="email" required>
+                <label for="password">Password:</label>
+                <input type="password" id="password" name="password" required>
+                <button type="submit">Create Account</button>
+            </form>
             <h3>Change Password</h3>
             <button id="changePasswordBtn">Change Password</button>
         </div>
@@ -75,11 +81,12 @@
             }
         });
 
-        // Account management
-        const createAccountBtn = document.getElementById('createAccountBtn');
-        createAccountBtn.addEventListener('click', () => {
-            const email = prompt('Enter new account email:');
-            const password = prompt('Enter new account password:');
+        // Account creation
+        const createAccountForm = document.getElementById('createAccountForm');
+        createAccountForm.addEventListener('submit', (e) => {
+            e.preventDefault();
+            const email = document.getElementById('email').value;
+            const password = document.getElementById('password').value;
             if (email && password) {
                 alert(`Account for ${email} created successfully!`);
                 // Store account details (this is a simple example, use a secure method in production)
