@@ -110,7 +110,7 @@ pre {
  .homepage-text {
     font-size: 2rem;
     color: #333;
-    background-image: linear-gradient(130, teal, blue);
+    background-image: linear-gradient(to bottom right, teal, blue);
     padding: 1rem;
     border-radius: 5px;
 }
