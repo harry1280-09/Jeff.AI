@@ -56,109 +56,111 @@
         <p>&copy; 2025 Ferris AI</p>
     </footer>
     <script>
-        const isAuthenticated = localStorage.getItem('isAuthenticated') === 'true';
-        if (!isAuthenticated) {
-            document.getElementById('chatLink').style.display = 'none';
-            document.getElementById('settingsLink').style.display = 'none';
-            document.getElementById('logoutBtn').style.display = 'none';
-        }
-
-        document.getElementById('logoutBtn').addEventListener('click', () => {
-            localStorage.removeItem('isAuthenticated');
-            localStorage.removeItem('isAdmin');
-            alert('You have been logged out.');
-            window.location.href = 'login.html'; // Redirect to login page
-        });
-
-        const fileTabs = document.getElementById('fileTabs');
-        const fileEditors = document.getElementById('fileEditors');
-        const files = {};
-
-        document.getElementById('addFileBtn').addEventListener('click', () => {
-            const fileName = document.getElementById('fileName').value;
-            if (fileName && !files[fileName]) {
-                addFileTab(fileName);
-                files[fileName] = '';
+        document.addEventListener('DOMContentLoaded', () => {
+            const isAuthenticated = localStorage.getItem('isAuthenticated') === 'true';
+            if (!isAuthenticated) {
+                document.getElementById('chatLink').style.display = 'none';
+                document.getElementById('settingsLink').style.display = 'none';
+                document.getElementById('logoutBtn').style.display = 'none';
             }
-        });
 
-        function addFileTab(fileName) {
-            const tab = document.createElement('button');
-            tab.textContent = fileName;
-            tab.classList.add('fileTab');
-            tab.addEventListener('click', () => openFile(fileName));
-            fileTabs.appendChild(tab);
-
-            const editor = document.createElement('textarea');
-            editor.id = `editor-${fileName}`;
-            editor.classList.add('codeEditor');
-            editor.addEventListener('input', (e) => {
-                files[fileName] = e.target.value;
+            document.getElementById('logoutBtn').addEventListener('click', () => {
+                localStorage.removeItem('isAuthenticated');
+                localStorage.removeItem('isAdmin');
+                alert('You have been logged out.');
+                window.location.href = 'login.html'; // Redirect to login page
             });
-            fileEditors.appendChild(editor);
-            openFile(fileName);
-        }
 
-        function openFile(fileName) {
-            const editors = document.querySelectorAll('.codeEditor');
-            editors.forEach(editor => editor.style.display = 'none');
-            document.getElementById(`editor-${fileName}`).style.display = 'block';
-        }
+            const fileTabs = document.getElementById('fileTabs');
+            const fileEditors = document.getElementById('fileEditors');
+            const files = {};
 
-        document.getElementById('runCodeBtn').addEventListener('click', async () => {
-            const language = document.getElementById('language').value;
-            const fileEntries = Object.entries(files);
+            document.getElementById('addFileBtn').addEventListener('click', () => {
+                const fileName = document.getElementById('fileName').value;
+                if (fileName && !files[fileName]) {
+                    addFileTab(fileName);
+                    files[fileName] = '';
+                }
+            });
 
-            if (language === 'html') {
-                const htmlContent = fileEntries.map(([fileName, content]) => {
-                    return `<script type="text/plain" data-filename="${fileName}">${content}</script>`;
-                }).join('\n');
-                const iframe = document.getElementById('outputIframe');
-                iframe.srcdoc = htmlContent;
-                showOutput('html');
-                return;
+            function addFileTab(fileName) {
+                const tab = document.createElement('button');
+                tab.textContent = fileName;
+                tab.classList.add('fileTab');
+                tab.addEventListener('click', () => openFile(fileName));
+                fileTabs.appendChild(tab);
+
+                const editor = document.createElement('textarea');
+                editor.id = `editor-${fileName}`;
+                editor.classList.add('codeEditor');
+                editor.addEventListener('input', (e) => {
+                    files[fileName] = e.target.value;
+                });
+                fileEditors.appendChild(editor);
+                openFile(fileName);
             }
 
-            try {
-                const response = await fetch('https://judge0.p.rapidapi.com/submissions?base64_encoded=false&wait=true', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                        'X-RapidAPI-Key': 'YOUR_RAPIDAPI_KEY',
-                        'X-RapidAPI-Host': 'judge0.p.rapidapi.com'
-                    },
-                    body: JSON.stringify({
-                        source_code: fileEntries.map(([fileName, content]) => `# ${fileName}\n${content}`).join('\n\n'),
-                        language_id: getLanguageId(language)
-                    })
-                });
-                const data = await response.json();
-                document.getElementById('outputText').textContent = data.stdout || data.stderr || 'Error running code';
-                showOutput('text');
-            } catch (error) {
-                console.error('Error:', error);
-                document.getElementById('outputText').textContent = 'Error running code';
-                showOutput('text');
+            function openFile(fileName) {
+                const editors = document.querySelectorAll('.codeEditor');
+                editors.forEach(editor => editor.style.display = 'none');
+                document.getElementById(`editor-${fileName}`).style.display = 'block';
+            }
+
+            document.getElementById('runCodeBtn').addEventListener('click', async () => {
+                const language = document.getElementById('language').value;
+                const fileEntries = Object.entries(files);
+
+                if (language === 'html') {
+                    const htmlContent = fileEntries.map(([fileName, content]) => {
+                        return `<script type="text/plain" data-filename="${fileName}">${content}</script>`;
+                    }).join('\n');
+                    const iframe = document.getElementById('outputIframe');
+                    iframe.srcdoc = htmlContent;
+                    showOutput('html');
+                    return;
+                }
+
+                try {
+                    const response = await fetch('https://judge0.p.rapidapi.com/submissions?base64_encoded=false&wait=true', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'X-RapidAPI-Key': 'YOUR_RAPIDAPI_KEY',
+                            'X-RapidAPI-Host': 'judge0.p.rapidapi.com'
+                        },
+                        body: JSON.stringify({
+                            source_code: fileEntries.map(([fileName, content]) => `# ${fileName}\n${content}`).join('\n\n'),
+                            language_id: getLanguageId(language)
+                        })
+                    });
+                    const data = await response.json();
+                    document.getElementById('outputText').textContent = data.stdout || data.stderr || 'Error running code';
+                    showOutput('text');
+                } catch (error) {
+                    console.error('Error:', error);
+                    document.getElementById('outputText').textContent = 'Error running code';
+                    showOutput('text');
+                }
+            });
+
+            function showOutput(type) {
+                document.getElementById('outputText').style.display = type === 'text' ? 'block' : 'none';
+                document.getElementById('outputImage').style.display = type === 'image' ? 'block' : 'none';
+                document.getElementById('outputIframe').style.display = type === 'html' ? 'block' : 'none';
+            }
+
+            function getLanguageId(language) {
+                switch (language) {
+                    case 'python': return 71; // Python 3
+                    case 'javascript': return 63; // JavaScript
+                    case 'html': return null; // HTML handled separately
+                    case 'cpp': return 54; // C++
+                    case 'java': return 62; // Java
+                    // Add more languages and their corresponding IDs
+                    default: return 71; // Default to Python 3
+                }
             }
         });
-
-        function showOutput(type) {
-            document.getElementById('outputText').style.display = type === 'text' ? 'block' : 'none';
-            document.getElementById('outputImage').style.display = type === 'image' ? 'block' : 'none';
-            document.getElementById('outputIframe').style.display = type === 'html' ? 'block' : 'none';
-        }
-
-        function getLanguageId(language) {
-            switch (language) {
-                case 'python': return 71; // Python 3
-                case 'javascript': return 63; // JavaScript
-                case 'html': return null; // HTML handled separately
-                case 'cpp': return 54; // C++
-                case 'java': return 62; // Java
-                // Add more languages and their corresponding IDs
-                default: return 71; // Default to Python 3
-            }
-        }
     </script>
 </body>
 </html>
