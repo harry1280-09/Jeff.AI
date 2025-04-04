@@ -106,3 +106,11 @@ pre {
     display: none;
     width: 100%;
     height: 
+}    
+ .homepage-text {
+    font-size: 1.2rem;
+    color: #333;
+    background-color: #eaeaea;
+    padding: 1rem;
+    border-radius: 5px;
+}
