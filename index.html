@@ -3,13 +3,13 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Jeff AI</title>
+    <title>Ferris AI</title>
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
     <header>
-        <img src="logo.svg" alt="Jeff AI Logo" class="logo">
-        <h1>Welcome to Jeff AI</h1>
+        <img src="logo.svg" alt="Ferris AI Logo" class="logo">
+        <h1>Welcome to Ferris AI</h1>
     </header>
     <nav>
         <a href="index.html">Home</a>
@@ -22,26 +22,51 @@
     </nav>
     <main id="home">
         <h2>Home</h2>
-        <p>Welcome to Jeff AI! To use the AI Chat, login <a href="login">here</a></p>
-        <p>More cool stuff is coming here! Check back for updates.</p>
+        <p>This is the home page of Ferris AI.</p>
     </main>
     <footer>
-        <p>&copy; 2025 Jeff AI</p>
+        <p>&copy; 2025 Ferris AI</p>
     </footer>
     <script>
-        const isAuthenticated = localStorage.getItem('isAuthenticated') === 'true';
-        if (!isAuthenticated) {
-            document.getElementById('chatLink').style.display = 'none';
-            document.getElementById('settingsLink').style.display = 'none';
-            document.getElementById('logoutBtn').style.display = 'none';
-        }
+        document.addEventListener('DOMContentLoaded', () => {
+            const isAuthenticated = localStorage.getItem('isAuthenticated') === 'true';
+            if (!isAuthenticated) {
+                document.getElementById('chatLink').style.display = 'none';
+                document.getElementById('settingsLink').style.display = 'none';
+                document.getElementById('logoutBtn').style.display = 'none';
+            }
 
-        document.getElementById('logoutBtn').addEventListener('click', () => {
-            localStorage.removeItem('isAuthenticated');
-            localStorage.removeItem('isAdmin');
-            alert('You have been logged out.');
-            window.location.href = 'login.html'; // Redirect to login page
+            document.getElementById('logoutBtn').addEventListener('click', () => {
+                localStorage.removeItem('isAuthenticated');
+                localStorage.removeItem('isAdmin');
+                alert('You have been logged out.');
+                window.location.href = 'login.html'; // Redirect to login page
+            });
+
+            // Apply theme based on user-specific settings
+            const urlParams = new URLSearchParams(window.location.search);
+            const userId = urlParams.get('user');
+            if (userId) {
+                const theme = localStorage.getItem(`theme-${userId}`) || 'default';
+                applyTheme(theme);
+            }
         });
+
+        function applyTheme(theme) {
+            if (theme === 'blue') {
+                document.body.style.backgroundColor = '#1E90FF';
+                document.body.style.color = '#fff';
+            } else if (theme === 'dark') {
+                document.body.style.backgroundColor = '#333';
+                document.body.style.color = '#fff';
+            } else if (theme === 'light') {
+                document.body.style.backgroundColor = '#fff';
+                document.body.style.color = '#000';
+            } else {
+                document.body.style.backgroundColor = '#f0f0f0';
+                document.body.style.color = '#000';
+            }
+        }
     </script>
 </body>
 </html>
