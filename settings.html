@@ -8,7 +8,7 @@
 </head>
 <body>
     <header>
-        <img src="logo.svg" alt="Ferris AI Logo" style="height: 80px;">
+        <img src="logo.svg" alt="Ferris AI Logo" class="logo">
         <h1>Settings</h1>
     </header>
     <nav>
@@ -33,13 +33,7 @@
         </div>
         <div class="account-management">
             <h3>Account Management</h3>
-            <form id="createAccountForm">
-                <label for="email">Email:</label>
-                <input type="email" id="email" name="email" required>
-                <label for="password">Password:</label>
-                <input type="password" id="password" name="password" required>
-                <button type="submit">Create Account</button>
-            </form>
+            <button id="createAccountBtn">Create Account</button>
             <h3>Change Password</h3>
             <button id="changePasswordBtn">Change Password</button>
         </div>
@@ -48,25 +42,38 @@
         <p>&copy; 2025 Ferris AI</p>
     </footer>
     <script>
-        const isAuthenticated = localStorage.getItem('isAuthenticated') === 'true';
-        const isAdmin = localStorage.getItem('isAdmin') === 'true';
-        if (!isAuthenticated) {
-            document.getElementById('chatLink').style.display = 'none';
-            document.getElementById('settingsLink').style.display = 'none';
-            document.getElementById('logoutBtn').style.display = 'none';
-        }
+        document.addEventListener('DOMContentLoaded', () => {
+            const isAuthenticated = localStorage.getItem('isAuthenticated') === 'true';
+            if (!isAuthenticated) {
+                document.getElementById('chatLink').style.display = 'none';
+                document.getElementById('settingsLink').style.display = 'none';
+                document.getElementById('logoutBtn').style.display = 'none';
+            }
 
-        document.getElementById('logoutBtn').addEventListener('click', () => {
-            localStorage.removeItem('isAuthenticated');
-            localStorage.removeItem('isAdmin');
-            alert('You have been logged out.');
-            window.location.href = 'login.html'; // Redirect to login page
+            document.getElementById('logoutBtn').addEventListener('click', () => {
+                localStorage.removeItem('isAuthenticated');
+                localStorage.removeItem('isAdmin');
+                alert('You have been logged out.');
+                window.location.href = 'login.html'; // Redirect to login page
+            });
+
+            // Load user-specific theme
+            const urlParams = new URLSearchParams(window.location.search);
+            const userId = urlParams.get('user');
+            if (userId) {
+                const theme = localStorage.getItem(`theme-${userId}`) || 'default';
+                document.getElementById('theme-select').value = theme;
+                applyTheme(theme);
+
+                document.getElementById('theme-select').addEventListener('change', (e) => {
+                    const selectedTheme = e.target.value;
+                    localStorage.setItem(`theme-${userId}`, selectedTheme);
+                    applyTheme(selectedTheme);
+                });
+            }
         });
 
-        // Theme selection
-        const themeSelect = document.getElementById('theme-select');
-        themeSelect.addEventListener('change', (e) => {
-            const theme = e.target.value;
+        function applyTheme(theme) {
             if (theme === 'blue') {
                 document.body.style.backgroundColor = '#1E90FF';
                 document.body.style.color = '#fff';
@@ -80,43 +87,57 @@
                 document.body.style.backgroundColor = '#f0f0f0';
                 document.body.style.color = '#000';
             }
-        });
+        }
 
-        // Account creation
-        const createAccountForm = document.getElementById('createAccountForm');
-        createAccountForm.addEventListener('submit', (e) => {
-            e.preventDefault();
-            if (!isAdmin) {
-                alert('Only admins can create accounts.');
-                return;
-            }
-            const email = document.getElementById('email').value;
-            const password = document.getElementById('password').value;
+        // Account management
+        const createAccountBtn = document.getElementById('createAccountBtn');
+        createAccountBtn.addEventListener('click', async () => {
+            const email = prompt('Enter new account email:');
+            const password = prompt('Enter new account password:');
+
             if (email && password) {
-                alert(`Account for ${email} created successfully!`);
-                // Store account details (this is a simple example, use a secure method in production)
-                localStorage.setItem(email, password);
+                try {
+                    const response = await fetch('users.json');
+                    const data = await response.json();
+                    if (data.users.some(user => user.email === email)) {
+                        alert('Account already exists.');
+                        return;
+                    }
+
+                    data.users.push({ email, password, isAdmin: false });
+                    alert('Account created successfully!');
+                    // Note: In a real-world scenario, you would need to save the updated JSON back to the server.
+                } catch (error) {
+                    console.error('Error:', error);
+                    alert('Error creating account');
+                }
             } else {
                 alert('Account creation failed. Please provide valid email and password.');
             }
         });
 
-        // Password change
+        // Change password
         const changePasswordBtn = document.getElementById('changePasswordBtn');
-        changePasswordBtn.addEventListener('click', () => {
+        changePasswordBtn.addEventListener('click', async () => {
             const email = prompt('Enter your email:');
             const currentPassword = prompt('Enter your current password:');
-            const storedPassword = localStorage.getItem(email);
-            if (storedPassword === currentPassword) {
-                const newPassword = prompt('Enter your new password:');
-                if (newPassword) {
-                    localStorage.setItem(email, newPassword);
+            const newPassword = prompt('Enter your new password:');
+
+            try {
+                const response = await fetch('users.json');
+                const data = await response.json();
+                const user = data.users.find(user => user.email === email && user.password === currentPassword);
+
+                if (user) {
+                    user.password = newPassword;
                     alert('Password changed successfully!');
+                    // Note: In a real-world scenario, you would need to save the updated JSON back to the server.
                 } else {
-                    alert('Password change failed. Please provide a valid new password.');
+                    alert('Invalid email or current password.');
                 }
-            } else {
-                alert('Invalid email or current password.');
+            } catch (error) {
+                console.error('Error:', error);
+                alert('Error changing password');
             }
         });
     </script>
