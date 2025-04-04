@@ -49,6 +49,7 @@
     </footer>
     <script>
         const isAuthenticated = localStorage.getItem('isAuthenticated') === 'true';
+        const isAdmin = localStorage.getItem('isAdmin') === 'true';
         if (!isAuthenticated) {
             document.getElementById('chatLink').style.display = 'none';
             document.getElementById('settingsLink').style.display = 'none';
@@ -85,6 +86,10 @@
         const createAccountForm = document.getElementById('createAccountForm');
         createAccountForm.addEventListener('submit', (e) => {
             e.preventDefault();
+            if (!isAdmin) {
+                alert('Only admins can create accounts.');
+                return;
+            }
             const email = document.getElementById('email').value;
             const password = document.getElementById('password').value;
             if (email && password) {
