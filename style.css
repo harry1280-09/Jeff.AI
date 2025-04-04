@@ -108,9 +108,9 @@ pre {
     height: 
 }    
  .homepage-text {
-    font-size: 1.2rem;
+    font-size: 2rem;
     color: #333;
-    background-color: #eaeaea;
+    background-image: linear-gradient(130, teal, blue);
     padding: 1rem;
     border-radius: 5px;
 }
