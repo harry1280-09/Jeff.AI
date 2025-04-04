@@ -134,3 +134,47 @@ pre {
 .fileTab:hover {
     background-color: #4169E1;
 }
+/* Add this to your style.css file */
+#loginForm {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    max-width: 400px;
+    margin: auto;
+    padding: 20px;
+    border: 1px solid #ccc;
+    border-radius: 10px;
+    background-color: #f9f9f9;
+}
+
+#loginForm div {
+    margin-bottom: 15px;
+}
+
+#loginForm label {
+    display: block;
+    margin-bottom: 5px;
+    font-weight: bold;
+}
+
+#loginForm input {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    box-sizing: border-box;
+}
+
+#loginForm button {
+    width: 100%;
+    padding: 10px;
+    background-color: #4CAF50;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+#loginForm button:hover {
+    background-color: #45a049;
+}
