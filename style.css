@@ -2,7 +2,8 @@ body {
     font-family: Arial, sans-serif;
     margin: 0;
     padding: 0;
-    background-color: #f0f0f0;
+    background: #246480;
+background: radial-gradient(circle, rgba(36, 100, 128, 1) 0%, rgba(58, 81, 145, 1) 50%, rgba(81, 64, 194, 1) 100%);
     padding-top: 70px; /* Add padding to avoid content being hidden behind the fixed nav */
 }
 header {
@@ -38,7 +39,8 @@ footer {
 nav {
     display: flex;
     justify-content: space-around;
-    background-color: #1E90FF;
+    background: #246480;
+background: radial-gradient(circle, rgba(36, 100, 128, 1) 0%, rgba(58, 81, 145, 1) 50%, rgba(81, 64, 194, 1) 100%);
     padding: 1rem;
     position: fixed;
     width: 100%;
