@@ -7,7 +7,7 @@ background: radial-gradient(circle, rgba(36, 100, 128, 1) 0%, rgba(58, 81, 145, 
     padding-top: 70px; /* Add padding to avoid content being hidden behind the fixed nav */
 }
 header {
-    background-image: linear-gradient(90deg, #020024 0%, #090979 35%, #00d4ff 100%);
+    
     color: white;
     padding: 1rem;
     width: 100%;
