@@ -6,7 +6,8 @@ body {
     padding-top: 70px; /* Add padding to avoid content being hidden behind the fixed nav */
 }
 header {
-    background-color: #1E90FF;
+    background: #246480;
+background: radial-gradient(circle, rgba(36, 100, 128, 1) 0%, rgba(58, 81, 145, 1) 50%, rgba(81, 64, 194, 1) 100%);
     color: white;
     padding: 1rem;
     width: 100%;
@@ -56,7 +57,7 @@ nav a, nav button {
 }
 nav a:hover, nav button:hover {
     background-color: #4169E1;
-    border-radius: 5px;
+    border-radius: 100px;
 }
 @media (max-width: 600px) {
     nav {
@@ -126,5 +127,5 @@ pre {
 }
 
 .fade-in {
-    animation: fadeIn 2s ease-in-out;
+    animation: fadeIn 3s ease-in-out;
 }
