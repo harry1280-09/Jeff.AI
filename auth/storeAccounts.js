@@ -14,16 +14,18 @@ function generateSalt() {
 // Store predefined hashed accounts securely
 async function storeAccounts() {
     const predefinedAccounts = [
-        { username: "authadmin@jeffai.network", salt: generateSalt() },
-        { username: "user2", salt: generateSalt() },
-        { username: "user3", salt: generateSalt() },
-        { username: "user4", salt: generateSalt() },
-        { username: "user5", salt: generateSalt() }
-    ];
+    { username: "test@jeffai", password: "1234" },
+    { username: "user2", password: "mypassword" },
+    { username: "user3", password: "helloWorld!" },
+    { username: "user4", password: "JeffAIrocks" },
+    { username: "user5", password: "superSecret" }
+];
 
-    for (let account of predefinedAccounts) {
-        account.password = await hashPassword(account.username + "pass", account.salt); // Example password scheme
-    }
+for (let account of predefinedAccounts) {
+    account.salt = generateSalt();
+    account.password = await hashPassword(account.password, account.salt);
+}
+
 
     localStorage.setItem("accounts", JSON.stringify(predefinedAccounts));
 }
