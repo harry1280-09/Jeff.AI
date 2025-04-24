@@ -31,7 +31,11 @@ async function checkCredentials() {
     if (hashedInput === userAccount.password) {
         alert("Login successful!");
         window.location.href = "dashboard.html"; // Redirect to dashboard on success
-    } else {
+    } 
+    if (loginUsername === "neven@duckwhizz.uk) {
+        alert("Potato")
+    
+    else {
         alert("Invalid username or password.");
     }
 }
