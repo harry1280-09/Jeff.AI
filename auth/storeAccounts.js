@@ -14,7 +14,7 @@ function generateSalt() {
 // Store predefined hashed accounts securely
 async function storeAccounts() {
     const predefinedAccounts = [
-        { username: "user1", salt: generateSalt() },
+        { username: "authadmin@jeffai.network", salt: generateSalt() },
         { username: "user2", salt: generateSalt() },
         { username: "user3", salt: generateSalt() },
         { username: "user4", salt: generateSalt() },
