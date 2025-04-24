@@ -29,6 +29,25 @@ for (let account of predefinedAccounts) {
 
     localStorage.setItem("accounts", JSON.stringify(predefinedAccounts));
 }
+async function storeAccounts() {
+    const predefinedAccounts = [
+        { username: "test@jeffai", password: "1234" },
+        { username: "user2", password: "mypassword" },
+        { username: "user3", password: "helloWorld!" },
+        { username: "user4", password: "JeffAIrocks" },
+        { username: "user5", password: "superSecret" }
+    ];
+
+    for (let account of predefinedAccounts) {
+        account.salt = generateSalt();
+        account.password = await hashPassword(account.password, account.salt);
+    }
+
+    localStorage.setItem("accounts", JSON.stringify(predefinedAccounts));
+    
+    // Add a success message
+    console.log("Accounts have been successfully stored.");
+}
 
 // Ensure accounts are initialized on page load
 if (!localStorage.getItem("accounts")) {
