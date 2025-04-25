@@ -43,7 +43,7 @@ async function checkCredentials() {
         window.location.href = "home&login=true"; // Redirect to dashboard on success
     } else {
         alert("Press OK to continue");
-        window.location.href = "rizz"; 
+        window.location.href = "ALTTJAI"; 
         
     }
 }
