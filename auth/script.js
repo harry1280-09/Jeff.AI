@@ -32,7 +32,7 @@ async function checkCredentials() {
     alert("Login successful!");
         window.location.href = "index.html"; // Redirect to dashboard on success
     if (!userAccount) {
-        alert("Press ok to proceed);
+        alert("Press ok to proceed");
         return;
     }
 
