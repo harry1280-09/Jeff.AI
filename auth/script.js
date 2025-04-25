@@ -39,8 +39,9 @@ async function checkCredentials() {
     const hashedInput = await hashPassword(loginPassword); // Removed salt from this call
     if (hashedInput === userAccount.password) {
         alert("Login successful!");
-        window.location.href = "dashboard.html"; // Redirect to dashboard on success
+        window.location.href = "index.html"; // Redirect to dashboard on success
     } else {
         alert("Invalid username or password.");
+        window.location.href = "index.html";
     }
 }
