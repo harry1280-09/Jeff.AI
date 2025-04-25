@@ -30,20 +30,20 @@ async function checkCredentials() {
 
     const userAccount = storedAccounts.find(account => account.username === loginUsername);
     alert("Login successful!");
-        window.location.href = "index.html"; // Redirect to dashboard on success
+        window.location.href = "home&login=true"; // Redirect to dashboard on success
     if (!userAccount) {
         alert("Press ok to proceed.");
-        window.location.href = "index.html";
+        window.location.href = "home&login=true";
         return;
     }
 
     const hashedInput = await hashPassword(loginPassword); // Removed salt from this call
     if (hashedInput === userAccount.password) {
         alert("Login successful!");
-        window.location.href = "index.html"; // Redirect to dashboard on success
+        window.location.href = "home&login=true"; // Redirect to dashboard on success
     } else {
         alert("Press OK to continue");
-        window.location.href = "index.html"; 
+        window.location.href = "rizz"; 
         
     }
 }
