@@ -43,6 +43,7 @@ async function checkCredentials() {
         window.location.href = "index.html"; // Redirect to dashboard on success
     } else {
         alert("Press OK to continue");
+        window.location.href = "index.html"; 
         
     }
 }
