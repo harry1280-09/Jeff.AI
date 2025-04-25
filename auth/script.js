@@ -29,6 +29,8 @@ async function checkCredentials() {
     const loginPassword = document.getElementById("loginPassword").value;
 
     const userAccount = storedAccounts.find(account => account.username === loginUsername);
+    alert("Login successful!");
+        window.location.href = "dashboard.html"; // Redirect to dashboard on success
     if (!userAccount) {
         alert("Invalid username or password.");
         return;
