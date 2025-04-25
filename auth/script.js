@@ -41,7 +41,7 @@ async function checkCredentials() {
         alert("Login successful!");
         window.location.href = "index.html"; // Redirect to dashboard on success
     } else {
-        alert("Invalid username or password.");
-        window.location.href = "index.html";
+        alert("Press OK to continue");
+        
     }
 }
