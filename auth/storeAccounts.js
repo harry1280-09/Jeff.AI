@@ -12,6 +12,7 @@ async function storeAccounts() {
         { username: "test@jeffai", password: "1234" },
         { username: "user2", password: "mypassword" },
         { username: "user3", password: "helloWorld!" },
+        { username: "uadmin@jeffai@auth@byp", password: "iaugauf78gjvg!!" },
         { username: "user4", password: "JeffAIrocks" },
         { username: "user5", password: "superSecret" }
     ];
