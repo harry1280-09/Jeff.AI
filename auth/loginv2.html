@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css"
+    />
+    <link rel="stylesheet" href="./style.css" />
+    <title>Login to Jeff AI</title>
+    <style>
+      /* Toast Notification Styles */
+      #toast-container {
+        position: fixed;
+        top: 20px;
+        right: 20px;
+        z-index: 1000;
+      }
+
+      .toast {
+        display: flex;
+        align-items: center;
+        background-color: #333;
+        color: #fff;
+        padding: 10px 15px;
+        margin-bottom: 10px;
+        border-radius: 5px;
+        box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3);
+        opacity: 0;
+        transform: translateY(-20px);
+        animation: fadeIn 0.5s forwards, fadeOut 0.5s 3.5s forwards;
+      }
+
+      .toast i {
+        margin-right: 10px;
+      }
+
+      @keyframes fadeIn {
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+
+      @keyframes fadeOut {
+        to {
+          opacity: 0;
+          transform: translateY(-20px);
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container" id="container">
+      <!-- Forms -->
+      <div class="form-container sign-up">
+        <form>
+          <h1>Sign in to Jeff AI Developer</h1>
+          <div class="social-icons">
+            <a href="#" class="icon"><i class="fa-brands fa-google"></i></a>
+            <a href="#" class="icon"><i class="fa-brands fa-facebook-f"></i></a>
+            <a href="#" class="icon"><i class="fa-brands fa-github"></i></a>
+            <a href="#" class="icon"><i class="fa-brands fa-linkedin-in"></i></a>
+          </div>
+          <span>Email sign in</span>
+          <input type="text" placeholder="Name" />
+          <input type="email" placeholder="Email" />
+          <input type="password" placeholder="Password" />
+          <button>Sign In</button>
+        </form>
+      </div>
+      <div class="form-container sign-in">
+        <form>
+          <h1>Sign In to Jeff AI</h1>
+          <div class="social-icons">
+            <a href="#" class="icon"><i class="fa-brands fa-google"></i></a>
+            <a href="#" class="icon"><i class="fa-brands fa-facebook-f"></i></a>
+            <a href="#" class="icon"><i class="fa-brands fa-github"></i></a>
+            <a href="#" class="icon"><i class="fa-brands fa-linkedin-in"></i></a>
+          </div>
+          <span>or use your email password</span>
+          <input type="text" id="loginUsername" placeholder="Email" />
+          <input type="password" id="loginPassword" placeholder="Password" />
+          <a href="#">Forget Your Password?</a>
+          <button type="button" onclick="checkCredentials()">Sign In</button>
+        </form>
+      </div>
+      <div class="toggle-container">
+        <div class="toggle">
+          <div class="toggle-panel toggle-left">
+            <h1>Welcome Back!</h1>
+            <p>Want the normal login page?</p>
+            <button class="hidden" id="login">Return to normal login</button>
+          </div>
+          <div class="toggle-panel toggle-right">
+            <h1>Looking for Jeff AI for developers?</h1>
+            <p>
+              Press the button to log in
+            </p>
+            <button class="hidden" id="register">Log In to Jeff AI Developers</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Toast Container -->
+    <div id="toast-container"></div>
+
+    <script src="script.js"></script>
+    <script src="storeAccounts.js"></script>
+    <script>
+      // Toast Notification Function
+      function showToast(message, type = "info") {
+        const toastContainer = document.getElementById("toast-container");
+        const toast = document.createElement("div");
+        toast.className = `toast ${type}`;
+        toast.innerHTML = `<i class="fa-solid fa-info-circle"></i> ${message}`;
+        toastContainer.appendChild(toast);
+
+        // Remove toast after animation (4 seconds)
+        setTimeout(() => {
+          toast.remove();
+        }, 4000);
+      }
+
+      // Example: Replace alert with toast
+      function checkCredentials() {
+        const username = document.getElementById("loginUsername").value;
+        const password = document.getElementById("loginPassword").value;
+
+        if (!username || !password) {
+          showToast("Please fill in both fields!", "error");
+        } else {
+          showToast("Logging in...", "success");
+          // Perform your login logic here.
+        }
+      }
+    </script>
+  </body>
+</html>
