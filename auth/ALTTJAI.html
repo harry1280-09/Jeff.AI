@@ -1,1 +1,118 @@
-<h1>HI</h1>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Jeff AI - Account Dashboard</title>
+    <link rel="stylesheet" href="style.css">
+    <style>
+        /* Add animations */
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+            }
+            to {
+                opacity: 1;
+            }
+        }
+
+        @keyframes slideDown {
+            from {
+                transform: translateY(-50px);
+                opacity: 0;
+            }
+            to {
+                transform: translateY(0);
+                opacity: 1;
+            }
+        }
+
+        body {
+            animation: fadeIn 1.5s ease-in-out;
+        }
+
+        header h1 {
+            animation: slideDown 3s ease-out;
+        }
+
+        .homepage-text {
+            animation: fadeIn 2s ease-in-out;
+        }
+
+        nav a, nav button {
+            animation: fadeIn 2s ease-in-out;
+            animation-delay: 0.5s;
+        }
+
+        nav a:hover, nav button:hover {
+            transition: transform 5s ease;
+            transform: scale(1.1);
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <img src="logo.svg" alt="Ferris AI Logo" class="logo">
+        <h1>Hello! You are now logged in.</h1>
+    </header>
+    <nav>
+        <a href="index.html">Home</a>
+        <a href="about.html">About</a>
+        <a href="games.html">Games</a>
+        <a href="/Jeff.AI/auth/login">AI Chat</a>
+        <a href="settings.html" id="settingsLink">Settings</a>
+        <a href="code.html">Code Playground</a>
+        <button href="logout">Logout</button>
+    </nav>
+    <main id="home">
+        <h2></h2>
+        <p class="homepage-text">✨ Put the power of AI into Code</p>
+        <p class="homepage-text">🔥 Build and deploy quicker than ever before</p>
+        <p class="homepage-text">🔁 Get feedback, improve, repeat!</p>
+    </main>
+    <footer>
+        <p>&copy; 2025 Jeff AI</p>
+    </footer>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const isAuthenticated = localStorage.getItem('isAuthenticated') === 'true';
+            if (!isAuthenticated) {
+                document.getElementById('chatLink').style.display = 'none';
+                document.getElementById('settingsLink').style.display = 'none';
+                document.getElementById('logoutBtn').style.display = 'none';
+            }
+
+            document.getElementById('logoutBtn').addEventListener('click', () => {
+                localStorage.removeItem('isAuthenticated');
+                localStorage.removeItem('isAdmin');
+                alert('You have been logged out.');
+                window.location.href = 'login.html'; // Redirect to login page
+            });
+
+            // Apply theme based on user-specific settings
+            const urlParams = new URLSearchParams(window.location.search);
+            const userId = urlParams.get('user');
+            if (userId) {
+                const theme = localStorage.getItem(`theme-${userId}`) || 'default';
+                applyTheme(theme);
+            }
+        });
+
+        function applyTheme(theme) {
+            if (theme === 'blue') {
+                document.body.style.backgroundColor = '#1E90FF';
+                document.body.style.color = '#fff';
+            } else if (theme === 'dark') {
+                document.body.style.backgroundColor = '#333';
+                document.body.style.color = '#fff';
+            } else if (theme === 'light') {
+                document.body.style.backgroundColor = '#fff';
+                document.body.style.color = '#000';
+            } else {
+                document.body.style.backgroundColor = '#f0f0f0';
+                document.body.style.color = '#000';
+            }
+        }
+    </script>
+</body>
+</html>
